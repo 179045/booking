@@ -19,7 +19,7 @@ return [
     ],
     'components' => [        
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'common\models\user\User',
             'enableAutoLogin' => false,
         ],
         'log' => [
