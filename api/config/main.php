@@ -36,8 +36,8 @@ return [
             'sizeFormatBase' => 1000,
         ],
         'urlManager' => [
-            'enablePrettyUrl' => false,
-            'enableStrictParsing' => true,
+            'enablePrettyUrl' => true,
+            'enableStrictParsing' => false,
             'showScriptName' => false,
             
         ],
