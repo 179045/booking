@@ -2,7 +2,7 @@
 
 namespace app\modules\v1\forms\admin\auth;
 
-use common\models\User;
+use common\models\user\User;
 use yii\base\Model;
 
 /**
