@@ -2,19 +2,18 @@
 
 namespace backend\controllers\company;
 
-use common\models\space\SpaceSearch;
-use common\models\user\UserHasCompanySearch;
+use backend\models\company\forms\UserCompanyForm;
 use Yii;
-use common\models\company\Company;
-use common\models\company\CompanySearch;
+use common\models\user\UserHasCompany;
+use common\models\user\UserHasCompanySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CompanyController implements the CRUD actions for Company model.
+ * UserController implements the CRUD actions for UserHasCompany model.
  */
-class CompanyController extends Controller
+class UserController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,12 +31,12 @@ class CompanyController extends Controller
     }
 
     /**
-     * Lists all Company models.
+     * Lists all UserHasCompany models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CompanySearch();
+        $searchModel = new UserHasCompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,39 +46,30 @@ class CompanyController extends Controller
     }
 
     /**
-     * Displays a single Company model.
-     * @param integer $id
+     * Displays a single UserHasCompany model.
+     * @param integer $user_id
+     * @param integer $company_id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($user_id, $company_id)
     {
-        $spaceSearchModel = new SpaceSearch();
-        $spaceDataProvider = $spaceSearchModel->search($id, Yii::$app->request->queryParams);
-
-        $userSearchModel = new UserHasCompanySearch();
-        $userDataProvider = $userSearchModel->search($id, Yii::$app->request->queryParams);
-
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            'spaceDataProvider' => $spaceDataProvider,
-            'spaceSearchModel' => $spaceSearchModel,
-            'userDataProvider' => $userDataProvider,
-            'userSearchModel' => $userSearchModel,
+            'model' => $this->findModel($user_id, $company_id),
         ]);
     }
 
     /**
-     * Creates a new Company model.
+     * Creates a new UserHasCompany model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($company_id)
     {
-        $model = new Company();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model = new UserCompanyForm();
+        $model->company_id = $company_id;
+        if ($model->load(Yii::$app->request->post()) && $model->create()) {
+            return $this->redirect(['company/company/view', 'id' => $company_id]);
         }
 
         return $this->render('create', [
@@ -88,18 +78,19 @@ class CompanyController extends Controller
     }
 
     /**
-     * Updates an existing Company model.
+     * Updates an existing UserHasCompany model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param integer $user_id
+     * @param integer $company_id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($user_id, $company_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($user_id, $company_id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'user_id' => $model->user_id, 'company_id' => $model->company_id]);
         }
 
         return $this->render('update', [
@@ -108,29 +99,31 @@ class CompanyController extends Controller
     }
 
     /**
-     * Deletes an existing Company model.
+     * Deletes an existing UserHasCompany model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param integer $user_id
+     * @param integer $company_id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($user_id, $company_id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($user_id, $company_id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Company model based on its primary key value.
+     * Finds the UserHasCompany model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Company the loaded model
+     * @param integer $user_id
+     * @param integer $company_id
+     * @return UserHasCompany the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($user_id, $company_id)
     {
-        if (($model = Company::findOne($id)) !== null) {
+        if (($model = UserHasCompany::findOne(['user_id' => $user_id, 'company_id' => $company_id])) !== null) {
             return $model;
         }
 

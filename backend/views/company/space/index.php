@@ -4,18 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\company\CompanySearch */
+/* @var $company common\models\company\Company */
+/* @var $searchModel common\models\space\SpaceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Компании';
+$this->title = 'Заведения';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="company-index">
+<div class="space-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
 
     <p>
-        <?= Html::a('Создать', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать заведение', ['company/space/create', 'company_id' => $company->id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -28,8 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
+            'average_score',
+            'space_type_id',
+            'city_id',
+            'telephone',
+            'address',
             'description',
             'is_del',
+            //'company_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

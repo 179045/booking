@@ -2,6 +2,13 @@
 
 namespace common\models\space;
 
+use common\models\company\Company;
+use common\models\customer\Customer;
+use common\models\customer\CustomerHasSpace;
+use common\models\customer\TypeCustomer;
+use common\models\reference\City;
+use common\models\user\User;
+use common\models\user\UserHasSpace;
 use Yii;
 
 /**
@@ -62,15 +69,15 @@ class Space extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'is_del' => 'Is Del',
-            'average_score' => 'Average Score',
-            'space_type_id' => 'Space Type ID',
-            'city_id' => 'City ID',
-            'telephone' => 'Telephone',
-            'address' => 'Address',
-            'description' => 'Description',
-            'company_id' => 'Company ID',
+            'name' => 'Наименование',
+            'is_del' => 'Удален?',
+            'average_score' => 'Средний чек',
+            'space_type_id' => 'Тип заведения',
+            'city_id' => 'Город',
+            'telephone' => 'Телефон',
+            'address' => 'Адрес',
+            'description' => 'Описание',
+            'company_id' => 'Компания',
         ];
     }
 

@@ -2,19 +2,17 @@
 
 namespace backend\controllers\company;
 
-use common\models\space\SpaceSearch;
-use common\models\user\UserHasCompanySearch;
 use Yii;
-use common\models\company\Company;
-use common\models\company\CompanySearch;
+use common\models\space\Space;
+use common\models\space\SpaceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CompanyController implements the CRUD actions for Company model.
+ * SpaceController implements the CRUD actions for Space model.
  */
-class CompanyController extends Controller
+class SpaceController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,12 +30,12 @@ class CompanyController extends Controller
     }
 
     /**
-     * Lists all Company models.
+     * Lists all Space models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CompanySearch();
+        $searchModel = new SpaceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,39 +45,29 @@ class CompanyController extends Controller
     }
 
     /**
-     * Displays a single Company model.
+     * Displays a single Space model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $spaceSearchModel = new SpaceSearch();
-        $spaceDataProvider = $spaceSearchModel->search($id, Yii::$app->request->queryParams);
-
-        $userSearchModel = new UserHasCompanySearch();
-        $userDataProvider = $userSearchModel->search($id, Yii::$app->request->queryParams);
-
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'spaceDataProvider' => $spaceDataProvider,
-            'spaceSearchModel' => $spaceSearchModel,
-            'userDataProvider' => $userDataProvider,
-            'userSearchModel' => $userSearchModel,
         ]);
     }
 
     /**
-     * Creates a new Company model.
+     * Creates a new Space model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($company_id)
     {
-        $model = new Company();
-
+        $model = new Space();
+        $model->company_id = $company_id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['company/company/view', 'id' => $company_id]);
         }
 
         return $this->render('create', [
@@ -88,7 +76,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Updates an existing Company model.
+     * Updates an existing Space model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -108,7 +96,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Deletes an existing Company model.
+     * Deletes an existing Space model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -122,15 +110,15 @@ class CompanyController extends Controller
     }
 
     /**
-     * Finds the Company model based on its primary key value.
+     * Finds the Space model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Company the loaded model
+     * @return Space the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Company::findOne($id)) !== null) {
+        if (($model = Space::findOne($id)) !== null) {
             return $model;
         }
 
