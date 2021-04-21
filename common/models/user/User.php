@@ -1,10 +1,13 @@
 <?php
 namespace common\models\user;
 
+use common\models\company\Company;
+use common\models\space\Space;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -21,6 +24,11 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ *
+ * @property UserHasSpace[] $userHasSpace
+ * @property Space[] $spaces
+ * @property UserHasCompany[] $userHasCompany
+ * @property Company[] $companys
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -218,4 +226,32 @@ class User extends ActiveRecord implements IdentityInterface
         Yii::$app->user->login($this);
         return $this->auth_key;
     }
+
+    /**
+     * Gets query for [[UserHasSpace]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserHasSpace()
+    {
+        return $this->hasMany(UserHasSpace::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Spaces]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSpaces()
+    {
+        return $this->hasMany(Space::className(), ['id' => 'space_id'])->via('userHasSpace');
+    }
+
+
+    public static function getSpacesList()
+    {
+        $user = User::findOne(Yii::$app->user->getId());
+        return ArrayHelper::map($user->spaces, 'id', 'name');
+    }
+
 }
