@@ -2,6 +2,7 @@
 
 namespace common\models\space;
 
+use common\models\notice\Notice;
 use Yii;
 
 /**
@@ -46,7 +47,7 @@ class SpaceRoom extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Наименование',
             'is_del' => 'Is Del',
             'space_id' => 'Space ID',
         ];

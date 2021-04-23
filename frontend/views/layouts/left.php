@@ -36,7 +36,15 @@
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Инвентаризация', 'url' => ['inventory/inventory']],
-                ],
+                    [
+                        'label' => 'Настройки',
+                        'items' => [
+                                ['label' => 'Заведения', 'icon' => 'dashboard', 'url' => ['/user'], 'visible' => Yii::$app->user->can('director')],
+                                ['label' => 'Пользователи', 'icon' => 'dashboard', 'url' => ['/setting/user']],
+                                ['label' => 'Залы/столы', 'icon' => 'dashboard', 'url' => ['/setting/space-room']]
+                        ]
+                    ]
+                ]
             ]
         ) ?>
 
