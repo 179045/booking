@@ -26,11 +26,6 @@ use common\models\user\User;
 
         <?= $form->field($model, 'sum')->textInput(['type' => 'number', 'maxlength' => true]) ?>
 
-        <?= $form->field($model, 'space_id')->widget(Select2::className(), [
-            'data' => User::getSpacesList(),
-            'options' => ['placeholder' => 'Выберите заведение'],
-        ]) ?>
-
     </div>
 
     <div class="form-group">

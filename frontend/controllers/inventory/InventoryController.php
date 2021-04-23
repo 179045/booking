@@ -67,6 +67,7 @@ class InventoryController extends Controller
     {
         $model = new Inventory();
         $model->date_created = date('Y-m-d');
+        $model->space_id = User::findOne(Yii::$app->user->getId())->space_id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
