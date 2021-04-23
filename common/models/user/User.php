@@ -24,6 +24,8 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property string $fio
+ * @property string $position
  *
  * @property integer $company_id
  * @property integer $space_id
@@ -246,6 +248,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function getCompany()
     {
         return $this->hasOne(Company::className(), ['id' => 'company_id']);
+    }
+
+    /**
+     * Gets query for [[UserProfile]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserProfile()
+    {
+        return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
     }
 
 }
