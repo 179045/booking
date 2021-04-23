@@ -25,10 +25,11 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  *
- * @property UserHasSpace[] $userHasSpace
- * @property Space[] $spaces
- * @property UserHasCompany[] $userHasCompany
- * @property Company[] $companys
+ * @property integer $company_id
+ * @property integer $space_id
+ *
+ * @property Space $space
+ * @property Company $company
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -228,30 +229,23 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Gets query for [[UserHasSpace]].
+     * Gets query for [[Space]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUserHasSpace()
+    public function getSpace()
     {
-        return $this->hasMany(UserHasSpace::className(), ['user_id' => 'id']);
+        return $this->hasOne(Space::className(), ['id' => 'space_id']);
     }
 
     /**
-     * Gets query for [[Spaces]].
+     * Gets query for [[Company]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getSpaces()
+    public function getCompany()
     {
-        return $this->hasMany(Space::className(), ['id' => 'space_id'])->via('userHasSpace');
-    }
-
-
-    public static function getSpacesList()
-    {
-        $user = User::findOne(Yii::$app->user->getId());
-        return ArrayHelper::map($user->spaces, 'id', 'name');
+        return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
 
 }
