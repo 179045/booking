@@ -13,4 +13,6 @@ return [
             'class' => 'yii\rbac\DbManager',
         ],
     ],
+    'language' => 'ru-RU',
+
 ];
