@@ -28,6 +28,15 @@ class SpaceRoom extends \yii\db\ActiveRecord
         return 'space_room';
     }
 
+    public static function get($queryParams)
+    {
+        $searchModel = new SpaceRoomSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $spaceRooms = $dataProvider->query->all();
+        $response['data'] = $spaceRooms;
+        return $spaceRooms;
+    }
+
     /**
      * {@inheritdoc}
      */

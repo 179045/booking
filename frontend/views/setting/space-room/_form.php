@@ -10,7 +10,10 @@ use yii\widgets\ActiveForm;
 
 <div class="space-room-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([ 'enableClientValidation' => true,
+                'options'                => [
+                    'id'      => 'dynamic-form'
+                 ]]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

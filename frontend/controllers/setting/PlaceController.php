@@ -3,16 +3,16 @@
 namespace frontend\controllers\setting;
 
 use Yii;
-use common\models\space\SpaceRoom;
-use common\models\space\SpaceRoomSearch;
+use common\models\space\Place;
+use common\models\space\PlaceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SpaceRoomController implements the CRUD actions for SpaceRoom model.
+ * PlaceController implements the CRUD actions for Place model.
  */
-class SpaceRoomController extends Controller
+class PlaceController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class SpaceRoomController extends Controller
     }
 
     /**
-     * Lists all SpaceRoom models.
+     * Lists all Place models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SpaceRoomSearch();
+        $searchModel = new PlaceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class SpaceRoomController extends Controller
     }
 
     /**
-     * Displays a single SpaceRoom model.
+     * Displays a single Place model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,25 +58,25 @@ class SpaceRoomController extends Controller
     }
 
     /**
-     * Creates a new SpaceRoom model.
+     * Creates a new Place model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SpaceRoom();
+        $model = new Place();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('_form', [
+        return $this->render('create', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Updates an existing SpaceRoom model.
+     * Updates an existing Place model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,7 +96,7 @@ class SpaceRoomController extends Controller
     }
 
     /**
-     * Deletes an existing SpaceRoom model.
+     * Deletes an existing Place model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -110,23 +110,18 @@ class SpaceRoomController extends Controller
     }
 
     /**
-     * Finds the SpaceRoom model based on its primary key value.
+     * Finds the Place model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SpaceRoom the loaded model
+     * @return Place the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SpaceRoom::findOne($id)) !== null) {
+        if (($model = Place::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionGetSpaceRooms(){
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return SpaceRoom::get(Yii::$app->request->queryParams);
     }
 }
