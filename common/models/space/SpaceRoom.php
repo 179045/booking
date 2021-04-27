@@ -79,7 +79,7 @@ class SpaceRoom extends \yii\db\ActiveRecord
      */
     public function getPlaces()
     {
-        return $this->hasMany(Place::className(), ['space_room_id' => 'id']);
+        return $this->hasMany(Place::className(), ['space_room_id' => 'id'])->andOnCondition(['place.is_del' => 0]);
     }
 
     /**
