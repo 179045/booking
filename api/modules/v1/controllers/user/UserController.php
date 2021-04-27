@@ -49,7 +49,7 @@ class UserController extends Controller
         if ($model->load(Yii::$app->request->post(), '') && $model->create()) {
             return $model;
         }
-         $this->response->setStatusCode(400);
+        $this->response->setStatusCode(400);
         return [
             'message' => 'Ошибка при сохранении',
             'errors' => $model->getErrors()
