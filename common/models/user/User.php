@@ -31,6 +31,7 @@ use yii\web\IdentityInterface;
  * @property integer $space_id
  *
  * @property Space $space
+ * @property UserProfile $userProfile
  * @property Company $company
  */
 class User extends ActiveRecord implements IdentityInterface
