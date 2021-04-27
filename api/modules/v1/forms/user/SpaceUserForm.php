@@ -13,9 +13,10 @@ use common\models\user\User;
 use common\models\user\UserProfile;
 use Yii;
 use yii\base\Model;
+use yii\db\StaleObjectException;
 use yii\rbac\DbManager;
 
-class SpaceUserFrom extends Model
+class SpaceUserForm extends Model
 {
     public $username;
     public $fio;
@@ -33,13 +34,10 @@ class SpaceUserFrom extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\user\User', 'message' => 'Имя пользователя занято. Выберите другое имя пользователя.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
-            ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
 
-            [['fio', 'position'], 'required'],
             [['fio', 'position'], 'string']
         ];
     }
@@ -104,5 +102,68 @@ class SpaceUserFrom extends Model
             )
             ->asArray()
             ->all();
+    }
+
+    public static function one($id)
+    {
+        return User::find()
+            ->select([
+                'user.id',
+                'username',
+                'user_profile.fio',
+                'user_profile.position',
+                'space_id',
+                'company_id'
+            ])
+            ->leftJoin('user_profile', 'user_profile.user_id = user.id')
+            ->where(
+                [
+                    'user.id' => $id,
+                    'space_id' => User::findOne(\Yii::$app->user->getId())->space_id
+                ]
+            )
+            ->asArray()
+            ->one();
+    }
+
+    public function update($id)
+    {
+        $user = User::findOne($id);
+        $user->username = $this->username;
+        if($this->password){
+            $user->setPassword($this->password);
+        }
+
+        $user_profile = $user->userProfile;
+        $user_profile->fio = $this->fio;
+        $user_profile->position = $this->position;
+
+        if ($user->save() && $user_profile->save()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function delete($id)
+    {
+        $user = User::findOne($id);
+        //проверка на компанию чтобы не удаляли не своих пользователей
+        $author = User::findOne(Yii::$app->user->getId());
+        if($user->company_id != $author->company_id){
+            return false;
+        }
+        //самого себбя тоже нельзя удалить
+        if($user->id == $author->id){
+            return false;
+        }
+        try {
+            $user->delete();
+        } catch (StaleObjectException $e) {
+            return false;
+        } catch (\Throwable $e) {
+            return false;
+        }
+        return true;
     }
 }
