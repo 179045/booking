@@ -33,7 +33,9 @@ class m210422_045913_create_table_user_profile extends Migration
             'user_profile',
             'user_id',
             'user',
-            'id'
+            'id',
+            'CASCADE',
+            'NO ACTION'
         );
     }
 
