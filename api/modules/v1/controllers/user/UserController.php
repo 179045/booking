@@ -9,7 +9,7 @@
 namespace api\modules\v1\controllers\user;
 
 
-use api\modules\v1\forms\user\SpaceUserFrom;
+use api\modules\v1\forms\user\SpaceUserForm;
 use common\models\user\User;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
@@ -33,12 +33,12 @@ class UserController extends Controller
 
     public function actionGetSpaceUsers()
     {
-        return SpaceUserFrom::get();
+        return SpaceUserForm::get();
     }
 
     public function actionCreate($space = null)
     {
-        $model = new SpaceUserFrom();
+        $model = new SpaceUserForm();
         $user = User::findOne(Yii::$app->user->getId());
         $model->company_id = $user->company_id;
         if ($space){
@@ -54,6 +54,54 @@ class UserController extends Controller
             'message' => 'Ошибка при сохранении',
             'errors' => $model->getErrors()
         ];
+    }
+
+    public function actionUpdate($id, $space = null)
+    {
+        $user = User::findOne($id);
+        if($user == null){
+            $this->response->setStatusCode(404);
+            return [
+                'message' => 'Пользователь не найден',
+            ];
+        }
+        $model = new SpaceUserForm();
+        if ($model->load(Yii::$app->request->post(), '')&& $model->validate() && $model->update($id)) {
+            return $model;
+        }else {
+            $this->response->setStatusCode(400);
+            return [
+                'message' => 'Ошибка при сохранении',
+                'errors' => $model->getErrors()
+            ];
+        }
+    }
+
+    public function actionDelete($id)
+    {
+        $user = User::findOne($id);
+        if($user == null){
+            $this->response->setStatusCode(404);
+            return [
+                'message' => 'Пользователь не найден',
+            ];
+        }
+        $model = new SpaceUserForm();
+        if ($model->delete($id)) {
+            return $model;
+        }
+        $this->response->setStatusCode(400);
+        return [
+            'message' => 'Ошибка при удалении',
+            'errors' => $model->getErrors()
+        ];
+    }
+
+    public function actionView($id)
+    {
+
+        return SpaceUserForm::one($id);
+
     }
 
 }
