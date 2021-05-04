@@ -2,6 +2,7 @@
 
 namespace common\models\customer;
 
+use common\models\space\Space;
 use Yii;
 
 /**
